@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: product-service
-          image: ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/shopflow/product-service:latest
+          image: ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/shopflow/product-service:main
           ports:
             - containerPort: 8001
           env:
