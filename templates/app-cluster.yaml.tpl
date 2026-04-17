@@ -7,11 +7,11 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/saranca14/shopflow-gitops.git
+    repoURL: ${repo_url}
     targetRevision: main
     path: clusters/app
   destination:
-    server: https://2B05FB8142A39C518AC13F42AB54050F.gr7.eu-west-1.eks.amazonaws.com
+    server: ${app_cluster_endpoint}
     namespace: ecommerce
   syncPolicy:
     automated:
