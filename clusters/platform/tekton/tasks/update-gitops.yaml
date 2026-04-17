@@ -21,10 +21,18 @@ spec:
   steps:
     - name: update-and-push
       image: alpine/git:2.43.0
+      env:
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: gitops-auth
+              key: token
       script: |
         #!/bin/sh
         set -e
-        git clone $(params.gitops-repo-url) /tmp/gitops
+        # Authenticate the repo URL
+        AUTH_URL=$(echo $(params.gitops-repo-url) | sed "s|https://github.com|https://${GITHUB_TOKEN}@github.com|")
+        git clone $AUTH_URL /tmp/gitops
         cd /tmp/gitops
 
         # Update the image tag in the app cluster manifest
