@@ -23,7 +23,17 @@ spec:
     - name: clone
       image: alpine/git:2.43.0
       script: |
-        git clone $(params.repo-url) $(workspaces.source.path)/source
-        cd $(workspaces.source.path)/source
-        git checkout $(params.revision)
-        echo "Cloned $(params.repo-url) at $(params.revision)"
+        if [ -d "$(workspaces.source.path)/source/.git" ]; then
+          echo "Repository already exists, updating..."
+          cd $(workspaces.source.path)/source
+          git fetch
+          git checkout $(params.revision)
+          git pull origin $(params.revision)
+        else
+          echo "Fresh clone..."
+          rm -rf $(workspaces.source.path)/source
+          git clone $(params.repo-url) $(workspaces.source.path)/source
+          cd $(workspaces.source.path)/source
+          git checkout $(params.revision)
+        fi
+        echo "Cloned/Updated $(params.repo-url) at $(params.revision)"
