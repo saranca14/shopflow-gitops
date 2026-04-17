@@ -19,6 +19,12 @@ spec:
   steps:
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:v1.22.0
+      env:
+        - name: AWS_REGION
+          value: "eu-west-1"
+      volumeMounts:
+        - name: docker-config
+          mountPath: /kaniko/.docker/
       command:
         - /kaniko/executor
       args:
@@ -27,3 +33,7 @@ spec:
         - "--destination=$(params.image)"
         - "--cache=true"
         - "--cache-ttl=24h"
+  volumes:
+    - name: docker-config
+      configMap:
+        name: docker-config
