@@ -1,0 +1,24 @@
+# App-of-Apps pattern: one ArgoCD Application manages all workload cluster apps
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: workload-apps
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/YOUR_ORG/shopflow-gitops.git
+    targetRevision: main
+    path: clusters/workload
+    directory:
+      recurse: true
+  destination:
+    name: workload  # Registered cluster name in ArgoCD
+    namespace: ecommerce
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

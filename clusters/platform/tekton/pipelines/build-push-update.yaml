@@ -1,0 +1,67 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: build-push-update
+  namespace: tekton-builds
+spec:
+  params:
+    - name: repo-url
+      type: string
+      description: Application source repo URL
+    - name: revision
+      type: string
+      default: main
+    - name: service-name
+      type: string
+      description: "Service to build (e.g. product-service)"
+    - name: ecr-registry
+      type: string
+      description: "ECR registry URL (ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com)"
+    - name: project-name
+      type: string
+      default: shopflow
+    - name: gitops-repo-url
+      type: string
+      description: GitOps repo URL
+  workspaces:
+    - name: shared-workspace
+  tasks:
+    # Step 1: Clone source code
+    - name: clone
+      taskRef:
+        name: git-clone
+      params:
+        - name: repo-url
+          value: $(params.repo-url)
+        - name: revision
+          value: $(params.revision)
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+
+    # Step 2: Build and push Docker image
+    - name: build-push
+      taskRef:
+        name: docker-build-push
+      runAfter: [clone]
+      params:
+        - name: image
+          value: "$(params.ecr-registry)/$(params.project-name)/$(params.service-name):$(params.revision)"
+        - name: context
+          value: "services/$(params.service-name)"
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+
+    # Step 3: Update gitops repo with new image tag
+    - name: update-gitops
+      taskRef:
+        name: update-gitops
+      runAfter: [build-push]
+      params:
+        - name: gitops-repo-url
+          value: $(params.gitops-repo-url)
+        - name: service-name
+          value: $(params.service-name)
+        - name: image-tag
+          value: $(params.revision)

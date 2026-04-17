@@ -1,0 +1,65 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: github-push-binding
+  namespace: tekton-builds
+spec:
+  params:
+    - name: repo-url
+      value: $(body.repository.clone_url)
+    - name: revision
+      value: $(body.after)
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: shopflow-build-template
+  namespace: tekton-builds
+spec:
+  params:
+    - name: repo-url
+    - name: revision
+  resourcetemplates:
+    # Build all services on push (can be filtered to changed paths)
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: shopflow-build-
+        namespace: tekton-builds
+      spec:
+        pipelineRef:
+          name: build-push-update
+        params:
+          - name: repo-url
+            value: $(tt.params.repo-url)
+          - name: revision
+            value: $(tt.params.revision)
+          - name: service-name
+            value: "product-service"  # TODO: parameterize per-service
+          - name: ecr-registry
+            value: "ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com"
+          - name: gitops-repo-url
+            value: "https://github.com/YOUR_ORG/shopflow-gitops.git"
+        workspaces:
+          - name: shared-workspace
+            volumeClaimTemplate:
+              spec:
+                accessModes: [ReadWriteOnce]
+                resources:
+                  requests:
+                    storage: 1Gi
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: shopflow-listener
+  namespace: tekton-builds
+spec:
+  serviceAccountName: tekton-triggers-sa
+  triggers:
+    - name: github-push
+      bindings:
+        - ref: github-push-binding
+      template:
+        ref: shopflow-build-template

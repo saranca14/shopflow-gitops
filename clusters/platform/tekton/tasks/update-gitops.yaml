@@ -1,0 +1,44 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: update-gitops
+  namespace: tekton-builds
+spec:
+  params:
+    - name: gitops-repo-url
+      type: string
+      description: GitOps repo URL
+    - name: service-name
+      type: string
+    - name: image-tag
+      type: string
+    - name: git-user-email
+      type: string
+      default: "tekton@shopflow.dev"
+    - name: git-user-name
+      type: string
+      default: "Tekton CI"
+  steps:
+    - name: update-and-push
+      image: alpine/git:2.43.0
+      script: |
+        #!/bin/sh
+        set -e
+        git clone $(params.gitops-repo-url) /tmp/gitops
+        cd /tmp/gitops
+
+        # Update the image tag in the workload cluster manifest
+        MANIFEST="clusters/workload/apps/$(params.service-name).yaml"
+        if [ -f "$MANIFEST" ]; then
+          sed -i "s|:latest|:$(params.image-tag)|g" "$MANIFEST"
+          sed -i "s|:[a-f0-9]\{7,40\}|:$(params.image-tag)|g" "$MANIFEST"
+
+          git config user.email "$(params.git-user-email)"
+          git config user.name "$(params.git-user-name)"
+          git add .
+          git commit -m "ci: update $(params.service-name) to $(params.image-tag)" || echo "No changes"
+          git push
+          echo "Updated $(params.service-name) to tag $(params.image-tag)"
+        else
+          echo "Warning: Manifest $MANIFEST not found"
+        fi
