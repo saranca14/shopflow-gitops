@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - https://github.com/external-secrets/external-secrets/releases/download/v0.9.13/external-secrets.yaml
+  - secret-store.yaml
+  - external-secrets-sync.yaml
+
+patches:
+  # Add the IRSA annotation to the ServiceAccount
+  - target:
+      kind: ServiceAccount
+      name: external-secrets
+      namespace: external-secrets
+    patch: |-
+      - op: add
+        path: /metadata/annotations/eks.amazonaws.com~1role-arn
+        value: arn:aws:iam::122610497964:role/shopflow-platform-externalsecrets-role
