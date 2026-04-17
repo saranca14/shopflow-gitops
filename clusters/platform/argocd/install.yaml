@@ -13,7 +13,7 @@
 #   argocd login localhost:8080 --username admin --password <password>
 #
 # Register external clusters:
-#   argocd cluster add shopflow-workload --name workload
+#   argocd cluster add shopflow-app --name app
 #   argocd cluster add shopflow-observability --name observability
 ---
 apiVersion: v1

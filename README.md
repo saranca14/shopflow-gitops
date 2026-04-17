@@ -6,7 +6,7 @@ Single source of truth for what runs on all 3 EKS clusters. ArgoCD watches this 
 
 ```
 clusters/
-├── workload/          # E-commerce app + OTel Agent
+├── app/          # E-commerce app + OTel Agent
 │   ├── apps/          # 6 microservices (Deployments + Services)
 │   ├── datastores/    # PostgreSQL, Redis, RabbitMQ
 │   ├── ingress/       # ALB Ingress
@@ -42,7 +42,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 
 ### 2. Register Clusters in ArgoCD
 ```bash
-argocd cluster add shopflow-workload --name workload
+argocd cluster add shopflow-app --name app
 argocd cluster add shopflow-observability --name observability
 ```
 

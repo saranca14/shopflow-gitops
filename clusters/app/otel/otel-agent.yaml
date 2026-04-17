@@ -30,7 +30,7 @@ data:
       resource:
         attributes:
           - key: k8s.cluster.name
-            value: shopflow-workload
+            value: shopflow-app
             action: upsert
 
     exporters:

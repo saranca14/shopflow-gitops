@@ -4,4 +4,4 @@ metadata:
   name: ecommerce
   labels:
     app.kubernetes.io/part-of: shopflow
-    cluster: workload
+    cluster: app
