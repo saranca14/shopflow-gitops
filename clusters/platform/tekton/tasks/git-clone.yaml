@@ -23,6 +23,9 @@ spec:
     - name: clone
       image: alpine/git:2.43.0
       script: |
+        # Remove any stale git locks from previous failed/interrupted runs
+        rm -f $(workspaces.source.path)/source/.git/index.lock
+
         if [ -d "$(workspaces.source.path)/source/.git" ]; then
           echo "Repository already exists, updating..."
           cd $(workspaces.source.path)/source
