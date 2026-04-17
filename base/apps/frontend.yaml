@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/shopflow/frontend:main
+          image: 122610497964.dkr.ecr.eu-west-1.amazonaws.com/shopflow/frontend:main
           ports:
             - containerPort: 5000
           env:

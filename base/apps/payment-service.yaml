@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: payment-service
-          image: ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/shopflow/payment-service:main
+          image: 122610497964.dkr.ecr.eu-west-1.amazonaws.com/shopflow/payment-service:main
           ports:
             - containerPort: 8005
           env:

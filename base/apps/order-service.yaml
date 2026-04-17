@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: order-service
-          image: ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/shopflow/order-service:main
+          image: 122610497964.dkr.ecr.eu-west-1.amazonaws.com/shopflow/order-service:main
           ports:
             - containerPort: 8003
           env:
