@@ -21,3 +21,13 @@ images:
     newName: 122610497964.dkr.ecr.eu-west-1.amazonaws.com/shopflow/product-service
   - name: ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/shopflow/user-service
     newName: 122610497964.dkr.ecr.eu-west-1.amazonaws.com/shopflow/user-service
+
+patchesJSON69:
+  - target:
+      kind: Service
+      name: frontend
+      namespace: ecommerce
+    patch: |-
+      - op: replace
+        path: /spec/type
+        value: LoadBalancer
