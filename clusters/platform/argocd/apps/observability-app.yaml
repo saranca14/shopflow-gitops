@@ -10,10 +10,8 @@ spec:
     repoURL: https://github.com/saranca14/shopflow-gitops.git
     targetRevision: main
     path: clusters/observability
-    directory:
-      recurse: true
   destination:
-    name: observability  # Registered cluster name in ArgoCD
+    server: https://A259AB33B3C06A04FB9DFD24C57F36E1.gr7.eu-west-1.eks.amazonaws.com
   syncPolicy:
     automated:
       prune: true

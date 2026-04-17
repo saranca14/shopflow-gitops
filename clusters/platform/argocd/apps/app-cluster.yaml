@@ -11,10 +11,8 @@ spec:
     repoURL: https://github.com/saranca14/shopflow-gitops.git
     targetRevision: main
     path: clusters/app
-    directory:
-      recurse: true
   destination:
-    name: app  # Registered cluster name in ArgoCD
+    server: https://2B05FB8142A39C518AC13F42AB54050F.gr7.eu-west-1.eks.amazonaws.com
     namespace: ecommerce
   syncPolicy:
     automated:
