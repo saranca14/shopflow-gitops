@@ -36,7 +36,7 @@ spec:
         cd /tmp/gitops
 
         # Update the image tag in the app cluster manifest
-        MANIFEST="clusters/app/apps/$(params.service-name).yaml"
+        MANIFEST="base/apps/$(params.service-name).yaml"
         if [ -f "$MANIFEST" ]; then
           sed -i "s|:latest|:$(params.image-tag)|g" "$MANIFEST"
           sed -i "s|:[a-f0-9]\{7,40\}|:$(params.image-tag)|g" "$MANIFEST"
