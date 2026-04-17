@@ -11,7 +11,7 @@ patches:
   - target:
       kind: ServiceAccount
       name: external-secrets
-      namespace: external-secrets
+      namespace: default
     patch: |-
       - op: add
         path: /metadata/annotations/eks.amazonaws.com~1role-arn
