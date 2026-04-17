@@ -22,7 +22,7 @@ images:
   - name: ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/shopflow/user-service
     newName: 122610497964.dkr.ecr.eu-west-1.amazonaws.com/shopflow/user-service
 
-patchesJSON69:
+patches:
   - target:
       kind: Service
       name: frontend
