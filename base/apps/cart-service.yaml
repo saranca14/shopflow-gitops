@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: cart-service
-          image: ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/shopflow/cart-service:latest
+          image: ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/shopflow/cart-service:main
           ports:
             - containerPort: 8002
           env:
