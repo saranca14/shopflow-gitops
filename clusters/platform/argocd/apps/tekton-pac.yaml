@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tekton-pac
+  namespace: argocd
+spec:
+  project: default
+  source:
+    # Official PAC installation manifest
+    repoURL: https://github.com/tektoncd/pipeline-as-code
+    targetRevision: stable
+    path: release.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pipelines-as-code
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

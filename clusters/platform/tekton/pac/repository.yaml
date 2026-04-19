@@ -1,0 +1,12 @@
+apiVersion: pipelinesascode.tekton.dev/v1alpha1
+kind: Repository
+metadata:
+  name: shopflow-app
+  namespace: tekton-builds
+spec:
+  url: "https://github.com/your-username/shopflow-app"
+  git_provider:
+    # Uses the existing secret we found in your external-secrets sync
+    secret:
+      name: "gitops-auth"
+      key: "token"
